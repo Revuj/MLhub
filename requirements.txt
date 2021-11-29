@@ -1,0 +1,7 @@
+attrs==21.2.0
+importlib-resources==5.4.0
+Jinja2==3.0.3
+jsonschema==4.2.1
+MarkupSafe==2.0.1
+pyrsistent==0.18.0
+zipp==3.6.0

@@ -1,0 +1,11 @@
+__pycache__/
+**/__pycache__/
+env/
+*.pyc
+*.json
+*.swp
+pycache__/
+env/
+*.pyc
+*.json
+*.swp
