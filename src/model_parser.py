@@ -69,16 +69,18 @@ def parse_train(train):
 
 
 def parse_model(model, features_path, labels_path):
-  type = model["type"]
-  if type =='linear_regression':
+  model_type = model["type"]
+  if model_type =='linear_regression':
     code_generator.linear_regression_generator(features_path, labels_path)
-  elif type =='decision_tree_regression':
+  elif model_type =='polynomial_regression':
+    code_generator.polynomial_regression_generator(features_path, labels_path)
+  elif model_type =='decision_tree_regression':
     print("oi")
-  elif type =='random_forest_regression':
+  elif model_type =='random_forest_regression':
     print("oi")
-  elif type =='support_vector_regression':
+  elif model_type =='support_vector_regression':
     print("oi")
-  elif type =='cnn':
+  elif model_type =='cnn':
     print("oi")
   else:
-    raise Exception(f"Model type {type} does not exist")
+    raise Exception(f"Model type {model_type} does not exist")
