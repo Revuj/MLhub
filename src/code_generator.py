@@ -2,7 +2,12 @@ import os
 from jinja2 import Template
 
 def linear_regression_generator(features_path, labels_path):
-  with open(os.path.join("src","model_templates", "linear_regression.py")) as f:
+  with open(os.path.join("src","model_templates", "linear_regression.ipynb")) as f:
     template = Template(f.read())
-  print(template.render(features_file_path=features_path, labels_file_path=labels_path))
+
+  parsed_template = template.render(features_file_path=features_path, labels_file_path=labels_path)
+
+  with open(os.path.join("out","parsed_linear_regression.ipynb"), "w") as fh:
+    fh.write(parsed_template)
+
 
