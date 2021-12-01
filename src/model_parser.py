@@ -1,7 +1,7 @@
 import json
 import os
 from jsonschema import validate
-import generator
+import code_generator
 
 MLHub_schema = {
     "required": ["train"],
@@ -70,8 +70,10 @@ def parse_train(train):
 
 def parse_model(model, features_path, labels_path):
   type = model["type"]
-  if type =='decision_tree_regression':
-    generator.linear_regression_generator(features_path, labels_path)
+  if type =='linear_regression':
+    code_generator.linear_regression_generator(features_path, labels_path)
+  elif type =='decision_tree_regression':
+    print("oi")
   elif type =='random_forest_regression':
     print("oi")
   elif type =='support_vector_regression':
