@@ -30,7 +30,20 @@ def polynomial_regression_generator(features_path, labels_path):
   parsed_template = template.render(features_file_path=features_path, labels_file_path=labels_path)
   execute_template(parsed_template, "polynomial_regression")
 
+def decision_tree_generator(features_path, labels_path):
+  template = get_template("decision_tree.ipynb")
+  parsed_template = template.render(features_file_path=features_path, labels_file_path=labels_path)
+  execute_template(parsed_template, "decision_tree")
 
-  
+def support_vector_generator(features_path, labels_path):
+  template = get_template("support_vector_regression.ipynb")
+  parsed_template = template.render(features_file_path=features_path, labels_file_path=labels_path)
+  execute_template(parsed_template, "support_vector_regression")
+
+def random_forest_generator(features_path, labels_path):
+  template = get_template("random_forest.ipynb")
+  parsed_template = template.render(features_file_path=features_path, labels_file_path=labels_path)
+  execute_template(parsed_template, "random_forest")
+
 
 

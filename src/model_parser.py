@@ -75,11 +75,11 @@ def parse_model(model, features_path, labels_path):
   elif model_type =='polynomial_regression':
     code_generator.polynomial_regression_generator(features_path, labels_path)
   elif model_type =='decision_tree_regression':
-    print("oi")
-  elif model_type =='random_forest_regression':
-    print("oi")
+    code_generator.decision_tree_generator(features_path, labels_path)
   elif model_type =='support_vector_regression':
-    print("oi")
+    code_generator.support_vector_generator(features_path, labels_path)
+  elif model_type =='random_forest_regression':
+    code_generator.random_forest_generator(features_path, labels_path)
   elif model_type =='cnn':
     print("oi")
   else:

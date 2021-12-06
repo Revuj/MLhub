@@ -1,0 +1,12 @@
+{
+    "train": {
+      "data": {
+        "features": "/home/vitor/Documents/TACS/MLhub/data/features.csv",
+        "labels": "/home/vitor/Documents/TACS/MLhub/data/labels.csv"
+      }
+    },
+    "model": {
+      "type": "decision_tree_regression"
+    }
+  }
+  

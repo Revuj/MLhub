@@ -1,8 +1,8 @@
 {
   "train": {
     "data": {
-      "features": "C:/Users/35192/OneDrive/Desktop/MLhub/data/features.csv",
-      "labels": "C:/Users/35192/OneDrive/Desktop/MLhub/data/labels.csv"
+      "features": "/home/vitor/Documents/TACS/MLhub/data/features.csv",
+      "labels": "/home/vitor/Documents/TACS/MLhub/data/labels.csv"
     }
   },
   "model": {
