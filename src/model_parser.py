@@ -194,19 +194,6 @@ def parse_train(train):
 
 def parse_model(model, features_path, labels_path):
     model_type = model["type"]
-    code_generator.generate_code(model, features_path, labels_path)
-    return
-    if model_type == 'linear_regression':
-        code_generator.linear_regression_generator(features_path, labels_path)
-    elif model_type == 'polynomial_regression':
-        code_generator.polynomial_regression_generator(
-            features_path, labels_path)
-    elif model_type == 'decision_tree_regression':
-        code_generator.decision_tree_generator(features_path, labels_path)
-    elif model_type == 'support_vector_regression':
-        code_generator.support_vector_generator(features_path, labels_path)
-    elif model_type == 'random_forest_regression':
-        code_generator.random_forest_generator(features_path, labels_path)
     if model_type == 'cnn':
         print("oi")
     else:
