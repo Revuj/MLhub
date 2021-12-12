@@ -106,6 +106,32 @@ MLHub_schema = {
                         }
                     }
                 },
+                {
+                    "if": {
+                        "properties": {"type": {"const": "random_forest_regression"}}
+                    },
+                    "then": {
+                        "properties": {
+                            "n_estimators": {"type": "integer", "default": 100},
+                            "criterion": {"default": "squared_error", "enum": ["squared_error", "friedman_mse", "absolute_error", "poisson"]},
+                            "max_depth": {"type": ["integer", "null"], "default": None},
+                            "min_samples_split": {"type": "number", "default": 2},
+                            "min_samples_leaf": {"type": "number", "default": 1},
+                            "min_weight_fraction_leaf": {"type": "number", "default": 0.0},
+                            "max_features": {"type": ["integer", "string", "null"], "default": None},
+                            "random_state": {"type": ["integer", "null"], "default": None},
+                            "max_leaf_nodes": {"type": ["integer", "null"], "default": None},
+                            "min_impurity_decrease": {"type": "number", "default": 0.0},
+                            "ccp_alpha": {"type": "number", "default": 0.0, "minimum": 0},
+                            "bootstrap": {"type": "boolean", "default": True},
+                            "oob_score": {"type": "boolean", "default": False},
+                            "n_jobs": {"type": ["integer", "null"], "default": None},
+                            "verbose":{"type": "integer", "default": 0},
+                            "warm_start": {"type": "boolean", "default": False},
+                            "max_samples": {"type": ["number", "null"], "default": None},
+                        }
+                    }
+                },
             ]
         },
     }
