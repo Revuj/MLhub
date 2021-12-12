@@ -132,6 +132,26 @@ MLHub_schema = {
                         }
                     }
                 },
+                {
+                    "if": {
+                        "properties": {"type": {"const": "support_vector_regression"}}
+                    },
+                    "then": {
+                        "properties": {
+                            "kernel": {"enum": ["linear", "poly", "rbf", "sigmoid", "precomputed"], "default":"rbf"},
+                            "degree":{"type": "integer", "default": 3},
+                            "gamma": {"type": ["string", "number"],  "default": "scale"},
+                            "coef0":{"type": "number", "default": 0.0},
+                            "tol": {"type": "number", "default": 1e-3},
+                            "C": {"type": "number", "default": 1.0},
+                            "epsilon": {"type": "number", "default": 0.1},
+                            "shrinking": {"type": "boolean", "default": True},
+                            "cache_size": {"type": "number", "default": 200},
+                            "verbose": {"type": "boolean", "default": False},
+                            "max_iter": {"type": "integer", "default": -1},
+                        }
+                    }
+                }
             ]
         },
     }
