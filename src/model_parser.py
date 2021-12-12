@@ -66,7 +66,7 @@ MLHub_schema = {
                             "min_samples_split": {"type": "number", "default": 2},
                             "min_samples_leaf": {"type": "number", "default": 1},
                             "min_weight_fraction_leaf": {"type": "number", "default": 0.0},
-                            "max_features": {"type": ["integer", "null"], "default": None},
+                            "max_features": {"type": ["integer", "string", "null"], "default": None},
                             "random_state": {"type": ["integer", "null"], "default": None},
                             "max_leaf_nodes": {"type": ["integer", "null"], "default": None},
                             "min_impurity_decrease": {"type": "number", "default": 0.0},
@@ -118,7 +118,7 @@ MLHub_schema = {
                             "min_samples_split": {"type": "number", "default": 2},
                             "min_samples_leaf": {"type": "number", "default": 1},
                             "min_weight_fraction_leaf": {"type": "number", "default": 0.0},
-                            "max_features": {"type": ["integer", "null"], "default": None},
+                            "max_features": {"type": ["integer", "string", "null"], "default": None},
                             "random_state": {"type": ["integer", "null"], "default": None},
                             "max_leaf_nodes": {"type": ["integer", "null"], "default": None},
                             "min_impurity_decrease": {"type": "number", "default": 0.0},
@@ -165,7 +165,6 @@ def verify_exists(path):
 
 def validate_json(json):
     DefaultValidatingDraft7Validator(MLHub_schema).validate(json)
-    print(json)
     # validate(instance=json, schema=MLHub_schema)
 
 
