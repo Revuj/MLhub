@@ -66,7 +66,7 @@ MLHub_schema = {
                             "min_samples_split": {"type": "number", "default": 2},
                             "min_samples_leaf": {"type": "number", "default": 1},
                             "min_weight_fraction_leaf": {"type": "number", "default": 0.0},
-                            "max_features": {"type": ["integer", "string", "null"], "default": None},
+                            "max_features": {"type": ["integer", "null"], "default": None},
                             "random_state": {"type": ["integer", "null"], "default": None},
                             "max_leaf_nodes": {"type": ["integer", "null"], "default": None},
                             "min_impurity_decrease": {"type": "number", "default": 0.0},
@@ -165,7 +165,6 @@ def verify_exists(path):
 
 def validate_json(json):
     DefaultValidatingDraft7Validator(MLHub_schema).validate(json)
-    print(json)
     # validate(instance=json, schema=MLHub_schema)
 
 
@@ -195,19 +194,22 @@ def parse_train(train):
 
 def parse_model(model, features_path, labels_path):
     model_type = model["type"]
+    code_generator.generate_code(model, features_path, labels_path)
+    return
     if model_type == 'linear_regression':
         code_generator.linear_regression_generator(features_path, labels_path)
     elif model_type == 'polynomial_regression':
         code_generator.polynomial_regression_generator(
             features_path, labels_path)
     elif model_type == 'decision_tree_regression':
-        # print(model["criterion"])
         code_generator.decision_tree_generator(features_path, labels_path)
     elif model_type == 'support_vector_regression':
         code_generator.support_vector_generator(features_path, labels_path)
     elif model_type == 'random_forest_regression':
         code_generator.random_forest_generator(features_path, labels_path)
-    elif model_type == 'cnn':
+    if model_type == 'cnn':
         print("oi")
     else:
-        raise Exception(f"Model type {model_type} does not exist")
+        code_generator.generate_code(model, features_path, labels_path)
+    # else:
+    #    raise Exception(f"Model type {model_type} does not exist")
