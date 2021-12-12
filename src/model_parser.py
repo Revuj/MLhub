@@ -60,26 +60,49 @@ MLHub_schema = {
                     },
                     "then": {
                         "properties": {
-                            "criterion": {
-                                "default": "squared_error",
-                                "enum": ["squared_error", "friedman_mse", "absolute_error", "poisson"]
-                            },
-                            "splitter": {
-                                "default": "best",
-                                "enum": ["best", "random"]
-                            },
+                            "criterion": {"default": "squared_error", "enum": ["squared_error", "friedman_mse", "absolute_error", "poisson"]},
+                            "splitter": {"default": "best", "enum": ["best", "random"]},
                             "max_depth": {"type": ["integer", "null"], "default": None},
                             "min_samples_split": {"type": "number", "default": 2},
                             "min_samples_leaf": {"type": "number", "default": 1},
                             "min_weight_fraction_leaf": {"type": "number", "default": 0.0},
-                            "max_features": {
-                                "type": ["integer", "string", "null"],
-                                "default": None
-                            },
+                            "max_features": {"type": ["integer", "string", "null"], "default": None},
                             "random_state": {"type": ["integer", "null"], "default": None},
                             "max_leaf_nodes": {"type": ["integer", "null"], "default": None},
                             "min_impurity_decrease": {"type": "number", "default": 0.0},
                             "ccp_alpha": {"type": "number", "default": 0.0, "minimum": 0},
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {"type": {"const": "linear_regression"}}
+                    },
+                    "then": {
+                        "properties": {
+                            "fit_intercept": {"type": "boolean", "default": True},
+                            "normalize": {"type": "boolean", "default": False},
+                            "copy_X": {"type": "boolean", "default": True},
+                            "n_jobs": {"type": ["integer", "null"], "default": None},
+                            "positive": {"type": "boolean", "default": False},
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {"type": {"const": "polynomial_regression"}}
+                    },
+                    "then": {
+                        "properties": {
+                            "fit_intercept": {"type": "boolean", "default": True},
+                            "normalize": {"type": "boolean", "default": False},
+                            "copy_X": {"type": "boolean", "default": True},
+                            "n_jobs": {"type": ["integer", "null"], "default": None},
+                            "positive": {"type": "boolean", "default": False},
+                            "degree": {"type": "integer", "default": 2},
+                            "interaction_only": {"type": "boolean", "default": False},
+                            "include_bias": {"type": "boolean", "default": True},
+                            "order": {"enum": ["C", "F"], "default": "C"}
                         }
                     }
                 },
@@ -97,7 +120,7 @@ def verify_exists(path):
 def validate_json(json):
     DefaultValidatingDraft7Validator(MLHub_schema).validate(json)
     print(json)
-    #validate(instance=json, schema=MLHub_schema)
+    # validate(instance=json, schema=MLHub_schema)
 
 
 def parse_json(json_path):
