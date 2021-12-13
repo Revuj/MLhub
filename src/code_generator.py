@@ -23,9 +23,9 @@ def execute_template(parsed_template, notebook_name):
             nbformat.write(nb, f)
 
 
-def generate_code(model, features_path, labels_path):
+def generate_code(model, train_split, features_path, labels_path):
     model_type = model["type"]
     template = get_template(f"{model_type}.ipynb")
-    parsed_template = template.render(model=model,
+    parsed_template = template.render(model=model, train_split=train_split,
                                       features_file_path=features_path, labels_file_path=labels_path)
     execute_template(parsed_template, model_type)

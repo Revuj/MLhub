@@ -35,12 +35,13 @@ MLHub_schema = {
                 "split": {
                     "type": "object",
                     "properties": {
-                        "test_size": {"type": ["number", "null"], "default": None},
+                        "test_size": {"type": ["number", "null"], "default": 0.2},
                         "train_size": {"type": ["number", "null"], "default": None},
                         "random_state": {"type": ["integer", "null"], "default": None},
                         "shuffle": {"type": "boolean", "default": True},
-                        "stratify": {"type": ["string", "null"], "default": None, "enum": ["features, labels"]}
-                    }
+                        "stratify": {"default": None, "enum": ["features", "labels", None]}
+                    },
+                    "default":  {"test_size": 0.2, "train_size": None, "random_state":  None, "shuffle": True, "stratify":  None}
                 },
                 "data": {
                     "type": "object",
@@ -50,7 +51,8 @@ MLHub_schema = {
                     },
                     "required": ["features", "labels"]
                 }
-            }
+            },
+            "required": ["data"]
         },
         "model": {
             "type": "object",
@@ -185,7 +187,7 @@ def parse_json(json_path):
     model = parsed_json["model"]
 
     features_path, labels_path = parse_train(train)
-    parse_model(model, features_path, labels_path)
+    parse_model(model, train["split"], features_path, labels_path)
 
 
 def parse_train(train):
@@ -199,11 +201,12 @@ def parse_train(train):
     return features_path, labels_path
 
 
-def parse_model(model, features_path, labels_path):
+def parse_model(model, train_split, features_path, labels_path):
     model_type = model["type"]
     if model_type == 'cnn':
         print("oi")
     else:
-        code_generator.generate_code(model, features_path, labels_path)
+        code_generator.generate_code(
+            model, train_split, features_path, labels_path)
     # else:
     #    raise Exception(f"Model type {model_type} does not exist")
