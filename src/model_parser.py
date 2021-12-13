@@ -32,16 +32,23 @@ MLHub_schema = {
         "train": {
             "type": "object",
             "properties": {
+                "split": {
+                    "type": "object",
+                    "properties": {
+                        "test_size": {"type": ["number", "null"], "default": None},
+                        "train_size": {"type": ["number", "null"], "default": None},
+                        "random_state": {"type": ["integer", "null"], "default": None},
+                        "shuffle": {"type": "boolean", "default": True},
+                        "stratify": {"type": ["string", "null"], "default": None, "enum": ["features, labels"]}
+                    }
+                },
                 "data": {
                     "type": "object",
                     "properties": {
-                        "features": {
-                            "type": "string"
-                        },
-                        "labels": {
-                            "type": "string"
-                        }
-                    }
+                        "features": {"type": "string"},
+                        "labels": {"type": "string"}
+                    },
+                    "required": ["features", "labels"]
                 }
             }
         },
