@@ -90,7 +90,6 @@ MLHub_schema = {
                     "then": {
                         "properties": {
                             "fit_intercept": {"type": "boolean", "default": True},
-                            "normalize": {"type": "boolean", "default": False},
                             "copy_X": {"type": "boolean", "default": True},
                             "n_jobs": {"type": ["integer", "null"], "default": None},
                             "positive": {"type": "boolean", "default": False},
@@ -104,7 +103,6 @@ MLHub_schema = {
                     "then": {
                         "properties": {
                             "fit_intercept": {"type": "boolean", "default": True},
-                            "normalize": {"type": "boolean", "default": False},
                             "copy_X": {"type": "boolean", "default": True},
                             "n_jobs": {"type": ["integer", "null"], "default": None},
                             "positive": {"type": "boolean", "default": False},
