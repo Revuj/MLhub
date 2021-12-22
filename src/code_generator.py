@@ -1,12 +1,13 @@
 import os
 import nbformat
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 from nbconvert.preprocessors import ExecutePreprocessor
 
 
-def get_template(template_name):
+def get_template(template_name, problem_type):
     with open(os.path.join("src", "model_templates", template_name)) as f:
-        template = Template(f.read())
+        template = Environment(loader=FileSystemLoader(searchpath=os.path.join("src", "model_templates"))).from_string(
+            f"{{% extends '{problem_type}_template.ipynb' %}}\n" + f.read())  # prepend base template to file
     return template
 
 
@@ -25,7 +26,8 @@ def execute_template(parsed_template, notebook_name):
 
 def generate_code(model, train_split, features_path, labels_path):
     model_type = model["type"]
-    template = get_template(f"{model_type}.ipynb")
+    problem_type = model_type.split('_')[-1]
+    template = get_template(f"{model_type}.ipynb", problem_type)
     parsed_template = template.render(model=model, train_split=train_split,
                                       features_file_path=features_path, labels_file_path=labels_path)
     execute_template(parsed_template, model_type)
