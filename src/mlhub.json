@@ -1,0 +1,163 @@
+{
+  "required": ["train", "models"],
+  "type": "object",
+  "properties": {
+    "train": {
+      "type": "object",
+      "properties": {
+        "split": {
+          "type": "object",
+          "properties": {
+            "test_size": { "type": ["number", "null"], "default": 0.2 },
+            "train_size": { "type": ["number", "null"], "default": null },
+            "random_state": { "type": ["integer", "null"], "default": null },
+            "shuffle": { "type": "boolean", "default": true },
+            "stratify": { "default": null, "enum": ["features", "labels", null] }
+          },
+          "default": {
+            "test_size": 0.2,
+            "train_size": null,
+            "random_state": null,
+            "shuffle": true,
+            "stratify": null
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "features": { "type": "string" },
+            "labels": { "type": "string" }
+          },
+          "required": ["features", "labels"]
+        }
+      },
+      "required": ["data"]
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "default": "decision_tree_regression",
+            "enum": [
+              "decision_tree_regression",
+              "linear_regression",
+              "polynomial_regression",
+              "random_forest_regression",
+              "support_vector_regression"
+            ]
+          },
+          "name": {"type":["string","null"], "default":null}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "decision_tree_regression" } }
+            },
+            "then": {
+              "properties": {
+                "criterion": {
+                  "default": "squared_error",
+                  "enum": ["squared_error", "friedman_mse", "absolute_error", "poisson"]
+                },
+                "splitter": { "default": "best", "enum": ["best", "random"] },
+                "max_depth": { "type": ["integer", "null"], "default": null },
+                "min_samples_split": { "type": "number", "default": 2 },
+                "min_samples_leaf": { "type": "number", "default": 1 },
+                "min_weight_fraction_leaf": { "type": "number", "default": 0.0 },
+                "max_features": { "type": ["integer", "string", "null"], "default": null },
+                "random_state": { "type": ["integer", "null"], "default": null },
+                "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
+                "min_impurity_decrease": { "type": "number", "default": 0.0 },
+                "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "linear_regression" } }
+            },
+            "then": {
+              "properties": {
+                "fit_intercept": { "type": "boolean", "default": true },
+                "copy_X": { "type": "boolean", "default": true },
+                "n_jobs": { "type": ["integer", "null"], "default": null },
+                "positive": { "type": "boolean", "default": false }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "polynomial_regression" } }
+            },
+            "then": {
+              "properties": {
+                "fit_intercept": { "type": "boolean", "default": true },
+                "copy_X": { "type": "boolean", "default": true },
+                "n_jobs": { "type": ["integer", "null"], "default": null },
+                "positive": { "type": "boolean", "default": false },
+                "degree": { "type": "integer", "default": 2 },
+                "interaction_only": { "type": "boolean", "default": false },
+                "include_bias": { "type": "boolean", "default": true },
+                "order": { "enum": ["C", "F"], "default": "C" }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "random_forest_regression" } }
+            },
+            "then": {
+              "properties": {
+                "n_estimators": { "type": "integer", "default": 100 },
+                "criterion": {
+                  "default": "squared_error",
+                  "enum": ["squared_error", "friedman_mse", "absolute_error", "poisson"]
+                },
+                "max_depth": { "type": ["integer", "null"], "default": null },
+                "min_samples_split": { "type": "number", "default": 2 },
+                "min_samples_leaf": { "type": "number", "default": 1 },
+                "min_weight_fraction_leaf": { "type": "number", "default": 0.0 },
+                "max_features": { "type": ["integer", "string", "null"], "default": null },
+                "random_state": { "type": ["integer", "null"], "default": null },
+                "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
+                "min_impurity_decrease": { "type": "number", "default": 0.0 },
+                "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 },
+                "bootstrap": { "type": "boolean", "default": true },
+                "oob_score": { "type": "boolean", "default": false },
+                "n_jobs": { "type": ["integer", "null"], "default": null },
+                "verbose": { "type": "integer", "default": 0 },
+                "warm_start": { "type": "boolean", "default": false },
+                "max_samples": { "type": ["number", "null"], "default": null }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "support_vector_regression" } }
+            },
+            "then": {
+              "properties": {
+                "kernel": {
+                  "enum": ["linear", "poly", "rbf", "sigmoid", "precomputed"],
+                  "default": "rbf"
+                },
+                "degree": { "type": "integer", "default": 3 },
+                "gamma": { "type": ["string", "number"], "default": "scale" },
+                "coef0": { "type": "number", "default": 0.0 },
+                "tol": { "type": "number", "default": 1e-3 },
+                "C": { "type": "number", "default": 1.0 },
+                "epsilon": { "type": "number", "default": 0.1 },
+                "shrinking": { "type": "boolean", "default": true },
+                "cache_size": { "type": "number", "default": 200 },
+                "verbose": { "type": "boolean", "default": false },
+                "max_iter": { "type": "integer", "default": -1 }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
