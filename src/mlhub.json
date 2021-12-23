@@ -26,6 +26,7 @@
           "type": "object",
           "properties": {
             "features": { "type": "string" },
+            "category_threshold": { "type": "integer", "default": 10 },
             "labels": { "type": "string" }
           },
           "required": ["features", "labels"]
