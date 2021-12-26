@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 import concurrent.futures
 from jsonschema import Draft7Validator, validators
 import code_generator
@@ -54,7 +55,8 @@ def parse_json(json_path):
     models = parsed_json["models"]
 
     features_path, labels_path, category_threshold = parse_train(train)
-    parse_models(models, train["split"], features_path, labels_path, category_threshold)
+    parse_models(models, train["split"], features_path,
+                 labels_path, category_threshold)
 
 
 def parse_train(train):
@@ -69,21 +71,25 @@ def parse_train(train):
     return features_path, labels_path, category_threshold
 
 
-def parse_model(model, train_split, features_path, labels_path, category_threshold):
+def parse_model(model, train_split, features_path, labels_path, category_threshold, out_path):
     model_type = model["type"]
     if model_type == 'cnn':
         print("oi")
     else:
         return code_generator.generate_code(
-            model, train_split, features_path, labels_path, category_threshold)
+            model, train_split, features_path, labels_path, category_threshold, out_path)
     # else:
     #    raise Exception(f"Model type {model_type} does not exist")
 
 
 def parse_models(models, train_split, features_path, labels_path, category_threshold):
+    out_path = os.path.join("out", str(datetime.time(datetime.now())))
+    os.mkdir(out_path)
     with concurrent.futures.ProcessPoolExecutor() as executor:
         results = [executor.submit(
-            parse_model, model, train_split, features_path, labels_path, category_threshold) for model in models]
+            parse_model, model, train_split, features_path, labels_path, category_threshold, out_path) for model in models]
 
         for f in concurrent.futures.as_completed(results):
             print(f.result())
+
+    code_generator.generate_statistical_comparison(out_path)

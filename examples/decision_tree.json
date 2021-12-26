@@ -5,8 +5,8 @@
       "random_state": 0
     },
     "data": {
-      "features": "/home/vitor/Documents/TACS/MLhub/data/features.csv",
-      "labels": "/home/vitor/Documents/TACS/MLhub/data/labels.csv"
+      "features": "/Users/rafavarela/Projects/MLhub/data/features.csv",
+      "labels": "/Users/rafavarela/Projects/MLhub/data/features.csv"
     }
   },
   "models": [
