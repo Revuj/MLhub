@@ -29,12 +29,12 @@ def execute_template(parsed_template, notebook_name, add_unique=True):
             nbformat.write(nb, f)
 
 
-def generate_code(model, train_split, features_path, labels_path):
+def generate_code(model, train_split, features_path, labels_path, category_threshold):
     model_type = model["type"]
     filename = model["name"] if model["name"] is not None else model_type
     problem_type = model_type.split('_')[-1]
     template = get_template(f"{model_type}.ipynb", problem_type)
     parsed_template = template.render(model=model, train_split=train_split,
-                                      features_file_path=features_path, labels_file_path=labels_path)
+                                      features_file_path=features_path, labels_file_path=labels_path, category_threshold=category_threshold)
     execute_template(parsed_template, filename, add_unique=False)
     return f"Executed {filename} model"

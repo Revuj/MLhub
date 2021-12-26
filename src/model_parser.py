@@ -24,7 +24,9 @@ def extend_with_default(validator_class):
 
 
 def get_schema():
-    with open(os.path.join("src", "mlhub.json"), 'r') as file:
+
+    p = os.path.join("src", "mlhub.json")
+    with open(p, 'r') as file:
         schema = json.load(file)
     return schema
 
@@ -51,36 +53,37 @@ def parse_json(json_path):
     train = parsed_json["train"]
     models = parsed_json["models"]
 
-    features_path, labels_path = parse_train(train)
-    parse_models(models, train["split"], features_path, labels_path)
+    features_path, labels_path, category_threshold = parse_train(train)
+    parse_models(models, train["split"], features_path, labels_path, category_threshold)
 
 
 def parse_train(train):
     train_data = train["data"]
     features_path = train_data["features"]
     labels_path = train_data["labels"]
+    category_threshold = train_data["category_threshold"]
 
     verify_exists(features_path)
     verify_exists(labels_path)
 
-    return features_path, labels_path
+    return features_path, labels_path, category_threshold
 
 
-def parse_model(model, train_split, features_path, labels_path):
+def parse_model(model, train_split, features_path, labels_path, category_threshold):
     model_type = model["type"]
     if model_type == 'cnn':
         print("oi")
     else:
         return code_generator.generate_code(
-            model, train_split, features_path, labels_path)
+            model, train_split, features_path, labels_path, category_threshold)
     # else:
     #    raise Exception(f"Model type {model_type} does not exist")
 
 
-def parse_models(models, train_split, features_path, labels_path):
+def parse_models(models, train_split, features_path, labels_path, category_threshold):
     with concurrent.futures.ProcessPoolExecutor() as executor:
         results = [executor.submit(
-            parse_model, model, train_split, features_path, labels_path) for model in models]
+            parse_model, model, train_split, features_path, labels_path, category_threshold) for model in models]
 
         for f in concurrent.futures.as_completed(results):
             print(f.result())
