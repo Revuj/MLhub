@@ -10,3 +10,4 @@ env/
 *.json
 *.swp
 out/
+*.DS_Store
