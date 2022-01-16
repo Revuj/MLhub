@@ -48,7 +48,8 @@
               "random_forest_regression",
               "support_vector_regression",
               "decision_tree_classification",
-              "support_vector_machine_classification"
+              "support_vector_machine_classification",
+              "k_nearest_neighbours_classification" 
             ]
           },
           "name": {"type":["string","null"], "default":null}
@@ -205,6 +206,29 @@
                   "enum": ["ovo", "ovr"]
                 },
                 "break_ties": { "type": "boolean", "default": false }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "k_nearest_neighbours_classification" } }
+            },
+            "then": {
+              "properties": {
+                "n_neighbors": { "type": "number", "default": 5},
+                "weights": {
+                  "default": "uniform",
+                  "enum": ["uniform", "distance"]
+                },
+                "algorithm": {
+                  "default": "auto",
+                  "enum": ["auto", "ball_Tree", "kd_tree", "brute"]
+                },
+                "leaf_size": { "type": "number", "default": 30},
+                "p": { "type": "number", "default": 2},
+                "metric": { "type": "string", "default": "minkowski"},
+                "coef0": { "type": "number", "default": 0.0 },
+                "n_jobs": { "type": ["integer", "null"], "default": null }
               }
             }
           }
