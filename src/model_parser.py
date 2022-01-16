@@ -92,4 +92,5 @@ def parse_models(models, train_split, features_path, labels_path, category_thres
         for f in concurrent.futures.as_completed(results):
             print(f.result())
 
-    code_generator.generate_statistical_comparison(out_path)
+    problem_type = models[0]["type"].split('_')[-1]
+    code_generator.generate_statistical_comparison(problem_type, out_path)

@@ -46,7 +46,8 @@
               "linear_regression",
               "polynomial_regression",
               "random_forest_regression",
-              "support_vector_regression"
+              "support_vector_regression",
+              "decision_tree_classification"
             ]
           },
           "name": {"type":["string","null"], "default":null}
@@ -154,6 +155,29 @@
                 "cache_size": { "type": "number", "default": 200 },
                 "verbose": { "type": "boolean", "default": false },
                 "max_iter": { "type": "integer", "default": -1 }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "decision_tree_classification" } }
+            },
+            "then": {
+              "properties": {
+                "criterion": {
+                  "default": "gini",
+                  "enum": ["gini", "entropy"]
+                },
+                "splitter": { "default": "best", "enum": ["best", "random"] },
+                "max_depth": { "type": ["integer", "null"], "default": null },
+                "min_samples_split": { "type": "number", "default": 2 },
+                "min_samples_leaf": { "type": "number", "default": 1 },
+                "min_weight_fraction_leaf": { "type": "number", "default": 0.0 },
+                "max_features": { "type": ["integer", "string", "null"], "default": null },
+                "random_state": { "type": ["integer", "null"], "default": null },
+                "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
+                "min_impurity_decrease": { "type": "number", "default": 0.0 },
+                "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 }
               }
             }
           }
