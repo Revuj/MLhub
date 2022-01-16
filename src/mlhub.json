@@ -47,7 +47,8 @@
               "polynomial_regression",
               "random_forest_regression",
               "support_vector_regression",
-              "decision_tree_classification"
+              "decision_tree_classification",
+              "support_vector_machine_classification"
             ]
           },
           "name": {"type":["string","null"], "default":null}
@@ -178,6 +179,32 @@
                 "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
                 "min_impurity_decrease": { "type": "number", "default": 0.0 },
                 "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "support_vector_machine_classification" } }
+            },
+            "then": {
+              "properties": {
+                "C": { "type": "number", "default": 1.0},
+                "kernel": {
+                  "default": "rbf",
+                  "enum": ["linear", "poly", "rbf", "sigmoid", "precomputed"]
+                },
+                "degree": { "type": "number", "default": 3},
+                "gamma": { "type": ["string", "number"], "default": "scale" },
+                "coef0": { "type": "number", "default": 0.0 },
+                "tol": { "type": "number", "default": 1e-3 },
+                "shrinking": { "type": "boolean", "default": true },
+                "probability": { "type": "boolean", "default": false },
+                "max_iter": { "type": "integer", "default": -1 },
+                "decision_function_shape": {
+                  "default": "ovr",
+                  "enum": ["ovo", "ovr"]
+                },
+                "break_ties": { "type": "boolean", "default": false }
               }
             }
           }
