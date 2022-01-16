@@ -49,7 +49,8 @@
               "support_vector_regression",
               "decision_tree_classification",
               "support_vector_machine_classification",
-              "k_nearest_neighbours_classification" 
+              "k_nearest_neighbours_classification",
+              "random_forest_classification"
             ]
           },
           "name": {"type":["string","null"], "default":null}
@@ -229,6 +230,35 @@
                 "metric": { "type": "string", "default": "minkowski"},
                 "coef0": { "type": "number", "default": 0.0 },
                 "n_jobs": { "type": ["integer", "null"], "default": null }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "random_forest_classification" } }
+            },
+            "then": {
+              "properties": {
+                "n_estimators": { "type": "integer", "default": 100 },
+                "criterion": {
+                  "default": "gini",
+                  "enum": ["gini", "entropy"]
+                },
+                "max_depth": { "type": ["integer", "null"], "default": null },
+                "min_samples_split": { "type": "number", "default": 2 },
+                "min_samples_leaf": { "type": "number", "default": 1 },
+                "min_weight_fraction_leaf": { "type": "number", "default": 0.0 },
+                "max_features": { "type": ["integer", "string", "null"], "default": null },
+                "random_state": { "type": ["integer", "null"], "default": null },
+                "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
+                "min_impurity_decrease": { "type": "number", "default": 0.0 },
+                "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 },
+                "bootstrap": { "type": "boolean", "default": true },
+                "oob_score": { "type": "boolean", "default": false },
+                "n_jobs": { "type": ["integer", "null"], "default": null },
+                "verbose": { "type": "integer", "default": 0 },
+                "warm_start": { "type": "boolean", "default": false },
+                "max_samples": { "type": ["number", "null"], "default": null }
               }
             }
           }
