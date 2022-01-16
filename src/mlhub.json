@@ -50,7 +50,8 @@
               "decision_tree_classification",
               "support_vector_machine_classification",
               "k_nearest_neighbours_classification",
-              "random_forest_classification"
+              "random_forest_classification",
+              "naive_bayes_classification"
             ]
           },
           "name": {"type":["string","null"], "default":null}
