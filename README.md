@@ -80,7 +80,7 @@ We also generate a CSV file and special report that hold a statistical compariso
 
 ## Architecture
 
-![](https://i.imgur.com/5vdFNQR.png)
+![](https://i.imgur.com/h1lBgXM.png)
 
 
 ## Future Work
