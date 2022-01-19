@@ -45,7 +45,7 @@ def validate_json(json):
     # validate(instance=json, schema=MLHub_schema)
 
 
-def parse_json(json_path):
+def parse_json(json_path, dockerize=False):
     parsed_json = None
     with open(json_path, 'r') as fp:
         parsed_json = json.load(fp)
@@ -55,6 +55,9 @@ def parse_json(json_path):
     models = parsed_json["models"]
 
     features_path, labels_path, category_threshold = parse_train(train)
+
+    print(features_path, labels_path)
+    return 'pila'
     parse_models(models, train["split"], features_path,
                  labels_path, category_threshold)
 
