@@ -28,9 +28,10 @@
 
 ## Usage
 
-```python3 src/main.py --specs <models definition path>```
+```python3 src/main.py --specs <models definition path> [--dockerize dockerize flag]```
 
-* models definition path - path to the JSON file containing the definition of the models to be executed.
+* **models definition path** - path to the JSON file containing the definition of the models to be executed.
+* **dockerize flag** - boolean that enables a dockerized execution for the application (default is *False*)
 
 
 ## Background
@@ -79,9 +80,29 @@ We also generate a CSV file and special report that hold a statistical compariso
 <img src="https://i.imgur.com/4LppTXN.png" width="300"/>
 
 ## Architecture
+![](https://i.imgur.com/3mUU0Sw.png)
 
-![](https://i.imgur.com/h1lBgXM.png)
+The program is executed through the shell using just one argument which is the path for the JSON file containing the data paths and models' definitions.
 
+
+
+### Parser
+
+This module is responsible for parsing and validating the JSON file. This is done using the python [jsonschema](https://python-jsonschema.readthedocs.io/en/stable/) library. After that, it guarantees asynchronous execution by creating a pool of processes (one for each module) and then passing it the necessary information for the *Generator* module.
+
+### Generator
+
+Constructs and executes reports in the form of *csv* and *python notebook* files. Since most notebooks have a significant amount of common code, we utilized the [jinja2](https://pypi.org/project/Jinja2/) template engine and its inheritance capabilities as a way to render the final notebooks efficiently and with style. All of the notebooks are executed using [nbconvert preprocessors](https://nbconvert.readthedocs.io/en/latest/api/preprocessors.html).
+
+Both the *Parser* and *Generator* modules can be executed inside a [Docker container](https://www.docker.com/resources/what-container) so that our application runs smoothly, quickly and securely in any system.
+
+## In the context of TACS (Advanced Software Construction Techniques)
+
+We believe this project fits the TACS course perfectly as it represents a nice example of **Metaprogramming and Model-Driven Engineering** for two different reasons:
+* we have made use of a DSL (**Domain Specific Language**) in order to define the different models and its parameters using a JSON file
+* our tool performs **source-code generation** to construct the different reports that are responsible for training and evaluating machine learning models. 
+ 
+MLhub can also be categorized as an **Automatic Programming** tool as it is capable of synthesizing machine learning programs with just a few simple inputs that anyone is capable of writting, even those with very limited machine learning knowledge. 
 
 ## Future Work
 
