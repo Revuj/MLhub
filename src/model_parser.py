@@ -11,7 +11,7 @@ def extend_with_default(validator_class):
 
     def set_defaults(validator, properties, instance, schema):
         for property, subschema in properties.items():
-            if "default" in subschema:
+            if not isinstance(subschema, bool) and "default" in subschema:
                 instance.setdefault(property, subschema["default"])
 
         for error in validate_properties(
@@ -54,13 +54,15 @@ def parse_json(json_path):
     train = parsed_json["train"]
     models = parsed_json["models"]
 
-    features_path, labels_path, category_threshold = parse_train(train)
+    features_path, labels_path, category_threshold, train_data, train_settings = parse_train(
+        train)
     parse_models(models, train["split"], features_path,
-                 labels_path, category_threshold)
+                 labels_path, category_threshold, train_data, train_settings)
 
 
 def parse_train(train):
     train_data = train["data"]
+    train_settings = train["train_settings"]
     features_path = train_data["features"]
     labels_path = train_data["labels"]
     category_threshold = train_data["category_threshold"]
@@ -68,13 +70,14 @@ def parse_train(train):
     verify_exists(features_path)
     verify_exists(labels_path)
 
-    return features_path, labels_path, category_threshold
+    return features_path, labels_path, category_threshold, train_data, train_settings
 
 
-def parse_model(model, train_split, features_path, labels_path, category_threshold, out_path):
+def parse_model(model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path):
     model_type = model["type"]
     if model_type == 'cnn':
-        print("oi")
+        print(model)
+        return code_generator.generate_cnn(model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path)
     else:
         return code_generator.generate_code(
             model, train_split, features_path, labels_path, category_threshold, out_path)
@@ -82,12 +85,12 @@ def parse_model(model, train_split, features_path, labels_path, category_thresho
     #    raise Exception(f"Model type {model_type} does not exist")
 
 
-def parse_models(models, train_split, features_path, labels_path, category_threshold):
+def parse_models(models, train_split, features_path, labels_path, category_threshold, train_data, train_settings):
     out_path = os.path.join("out", str(datetime.time(datetime.now())))
     os.mkdir(out_path)
     with concurrent.futures.ProcessPoolExecutor() as executor:
         results = [executor.submit(
-            parse_model, model, train_split, features_path, labels_path, category_threshold, out_path) for model in models]
+            parse_model, model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path) for model in models]
 
         for f in concurrent.futures.as_completed(results):
             print(f.result())

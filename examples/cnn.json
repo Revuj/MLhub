@@ -1,0 +1,129 @@
+{
+  "train": {
+    "split": {
+      "test_size": 0.1,
+      "random_state": 0
+    },
+    "data": {
+      "features": "/home/vitor/Documents/TACS/MLhub/data/cnn/features.csv",
+      "labels": "/home/vitor/Documents/TACS/MLhub/data/cnn/labels.csv"
+    },
+    "train_settings": {
+      "epochs": 2,
+      "batch_size": 128 ,
+      "validation_split": 0.1
+    }
+  },
+  "models": [
+    {
+      "type": "cnn",
+      "loss": "categorical_crossentropy",
+      "input": {"type": "images", "shape": [28,28]},
+      "layers": [
+        {
+          "convolution": {
+            "filters": 32,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {
+          "convolution": {
+            "filters": 64,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {
+          "convolution": {
+            "filters": 128,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        "flatten",
+        {
+          "dense": {
+            "units": 128,
+            "activation":"relu"
+          }
+        },
+        {
+          "dense": {
+            "units": 10,
+            "activation":"softmax"
+          }
+        }
+      ]
+    },
+    {
+      "type": "cnn",
+      "loss": "categorical_crossentropy",
+      "input": {"type": "images", "shape": [28,28]},
+      "layers": [
+        {
+          "convolution": {
+            "filters": 32,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {"dropout": 0.25},
+        {
+          "convolution": {
+            "filters": 64,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {"dropout": 0.25},
+        {
+          "convolution": {
+            "filters": 128,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {"dropout": 0.4},
+        "flatten",
+        {
+          "dense": {
+            "units": 128,
+            "activation":"relu"
+          }
+        },
+        {"dropout": 0.3},
+        {
+          "dense": {
+            "units": 10,
+            "activation":"softmax"
+          }
+        }
+      ]
+    }
+  ]
+}

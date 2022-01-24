@@ -52,3 +52,15 @@ def generate_code(model, train_split, features_path, labels_path, category_thres
     execute_template(parsed_template, model_name, out_path)
 
     return f"Executed {model_name} model"
+
+
+def generate_cnn(model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path):
+    model_type = model["type"]
+    model_name = model["name"] if model["name"] is not None else f'{model_type}_{uuid.uuid1()}'
+    classification_input = model["input"]["type"] + "_classification"
+    template = get_template(f"{classification_input}.ipynb", model_type)
+    parsed_template = template.render(model=model, train_split=train_split,
+                                      features_file_path=features_path, labels_file_path=labels_path, model_name=model_name, category_threshold=category_threshold, train_data=train_data, train_settings=train_settings)
+    execute_template(parsed_template, model_name, out_path)
+
+    return f"Executed {model_name} model"

@@ -27,9 +27,23 @@
           "properties": {
             "features": { "type": "string" },
             "category_threshold": { "type": "integer", "default": 10 },
-            "labels": { "type": "string" }
+            "labels": { "type": "string" },
+            "num_classes": {"type":["integer", "null"], "default":null}
           },
           "required": ["features", "labels"]
+        },
+        "train_settings": {
+          "type": "object",
+          "properties": {
+            "epochs": { "type": "integer" },
+            "batch_size": { "type": "integer" },
+            "validation_split": { "type": "number", "minimun":0,"maximum":1 }
+          },
+          "default": {
+            "epochs": 10,
+            "batch_size": null,
+            "validation_split": 0
+          }
         }
       },
       "required": ["data"]
@@ -46,10 +60,11 @@
               "linear_regression",
               "polynomial_regression",
               "random_forest_regression",
-              "support_vector_regression"
+              "support_vector_regression",
+              "cnn"
             ]
           },
-          "name": {"type":["string","null"], "default":null}
+          "name": { "type": ["string", "null"], "default": null }
         },
         "allOf": [
           {
@@ -154,6 +169,163 @@
                 "cache_size": { "type": "number", "default": 200 },
                 "verbose": { "type": "boolean", "default": false },
                 "max_iter": { "type": "integer", "default": -1 }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "cnn" } }
+            },
+            "then": {
+              "required": ["loss", "layers", "input"],
+              "properties": {
+                "loss": {
+                  "type": "string",
+                  "enum": ["categorical_crossentropy", "mean_squared_error"]
+                },
+                "optimizer": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type":"string",
+                      "enum": ["adam", "adadelta", "sgd", "rmsprop"]
+                    },
+                    "learning_rate": {"type": "number"}
+                  },
+                  "default": {"name": "adam"}
+                },
+                "input": {
+                  "type": "object",
+                  "properties": {
+                    "type": {"type": "string", "enum": ["images"]},
+                    "shape": {
+                      "type": "array",
+                      "items": {"type": "integer"},
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "required": ["type", "shape"]
+                },
+                "layers": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": ["flatten"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "dense": {
+                            "type": "object",
+                            "properties": {
+                              "units": { "type": "integer" },
+                              "activation": {
+                                "type": ["string", "null"],
+                                "enum": [null, "softmax", "relu", "tanh", "sigmoid"],
+                                "default": null
+                              }
+                            },
+                            "required": ["units"]
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "dropout": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "convolution": {
+                            "type": "object",
+                            "properties": {
+                              "size": {
+                                "oneOf": [
+                                  {
+                                    "type": "array",
+                                    "items": { "type": "integer" },
+                                    "minItems": 2,
+                                    "maxItems": 3
+                                  },
+                                  {
+                                    "type": "integer"
+                                  }
+                                ]
+                              },
+                              "filters": { "type": "integer" },
+                              "activation": {
+                                "type": ["string", "null"],
+                                "enum": [null, "softmax", "relu", "tanh", "sigmoid"],
+                                "default": null
+                              }
+                            },
+                            "required": ["size", "filters"]
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "activation": {
+                            "type": "string",
+                            "enum": ["softmax", "relu", "tanh", "sigmoid"]
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "pooling": {
+                            "type": "object",
+                            "properties": {
+                              "size": {
+                                "oneOf": [
+                                  {
+                                    "type": "array",
+                                    "items": { "type": "integer" },
+                                    "minItems": 2,
+                                    "maxItems": 3
+                                  },
+                                  {
+                                    "type": "integer"
+                                  }
+                                ]
+                              },
+                              "type": { "type": "string", "enum": ["max", "average"] }
+                            },
+                            "required": ["size", "type"]
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "batch_normalization": {
+                            "type": "object",
+                            "properties": {
+                              "axis": { "type": "integer", "default": -1 }
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                }
               }
             }
           }
