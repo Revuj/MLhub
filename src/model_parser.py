@@ -9,12 +9,23 @@ import code_generator
 def run_in_docker(specs_path, features_path, labels_path):
 
     import docker_layer
+    import docker.errors
+
     print('Trying to get docker client...', end='')
     client = docker_layer.get_docker_client()
 
     if client is None:
         print('Failed')
         return
+    print('Done')
+
+
+    print('Getting docker image...', end='')
+    try:
+        client.images.get('josesilva69420/mlhub')
+    except docker.errors.ImageNotFound:
+        print('Will get image from docker hub...', end='')
+        client.images.pull('josesilva69420/mlhub', tag='latest')
     print('Done')
 
     container = docker_layer.create_container(client)

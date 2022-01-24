@@ -5,8 +5,8 @@
         "random_state": 0
       },
       "data": {
-        "features": "/home/vitor/Documents/TACS/MLhub/data/classification/features.csv",
-        "labels": "/home/vitor/Documents/TACS/MLhub/data/classification/labels.csv"
+        "features": "/home/krystal/MLhub/data/classification/features.csv",
+        "labels": "/home/krystal/MLhub/data/classification/labels.csv"
       }
     },
     "models": [
