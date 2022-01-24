@@ -38,27 +38,7 @@ def create_tar_stream(files):
     return tar_stream
 
 def main():
-
-    client = get_docker_client()
-    print(f'Client is {client}')
-
-
-    container = create_container(client)
-    container.start()
-
-    tar_stream = create_tar_stream([
-        ('cona.csv', 'bananana'.encode())
-        ])
-
-    #container.exec_run('touch cona.csv', user='mluser', workdir='/home/mluser')
-
-    container.put_archive('/home/mluser/', tar_stream)
-    print(container.status)
-    print(container.exec_run('cat cona.csv', user='mluser', workdir='/home/mluser'))
-    #print(container.status)
-    container.kill()
-    container.stop()
-    container.remove()
+    pass
 
 
 
