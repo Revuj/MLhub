@@ -89,11 +89,9 @@ Hope you learned and had fun!
 ## Product Purchase Prediction (Classifcation)
 
 This time we have a classification [problem](https://github.com/Revuj/MLhub/tree/master/data/classification) about people. 
-The goal here is to predict the anual profit of each company.
+The goal here is to predict if a person is or isn't buying a specific product.
 
-Let's also try to do a comparison between different classification models. [Here's how it's done](https://github.com/Revuj/MLhub/blob/2a9641ac31f2a725779a5e055252137879130a3c/examples/classification/multiple_models_classification.json):
-
-Now we have to define our own regression model in a JSON file. Let's use [this example](https://github.com/Revuj/MLhub/blob/master/examples/regression/decision_tree_regression.json) with a decision tree model:
+Let's also try to do a comparison between different classification models. [Here's how it's done](https://github.com/Revuj/MLhub/blob/master/examples/classification/multiple_models_classification.json):
 
 ```json
 {
@@ -162,7 +160,7 @@ Executing statistical comparison python notebook...
 Executed statistical comparison
 ```
 
-You can see that this time a statistical comparison report was generated in the [*out* folder](https://github.com/Revuj/MLhub/tree/master/examples_out/regression). But first, let's look at a report for one of the models:
+You can see that this time a statistical comparison report was generated in the [*out* folder](https://github.com/Revuj/MLhub/tree/master/examples_out/classification). But first, let's look at a report for one of the models:
 
 ![](https://i.imgur.com/fRUfy5q.png)
 
