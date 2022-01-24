@@ -36,7 +36,7 @@ Excited? Jump straight into the [Examples](https://github.com/Revuj/MLhub/blob/m
 
 ## Usage
 
-```python3 src/main.py --specs <models definition path> [--dockerize dockerize flag]```
+```python3 src/main.py --specs <models definition path> [--dockerize]```
 
 * **models definition path** - path to the JSON file containing the definition of the models to be executed.
 * **dockerize flag** - boolean that enables a dockerized execution for the application (default is *False*)
