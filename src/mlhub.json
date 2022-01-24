@@ -36,7 +36,7 @@
           "type": "object",
           "properties": {
             "epochs": { "type": "integer" },
-            "batch_size": { "type": "integer" },
+            "batch_size": { "type": ["integer", "null"] },
             "validation_split": { "type": "number", "minimun":0,"maximum":1 }
           },
           "default": {
@@ -61,7 +61,12 @@
               "polynomial_regression",
               "random_forest_regression",
               "support_vector_regression",
-              "cnn"
+              "cnn",
+              "decision_tree_classification",
+              "support_vector_machine_classification",
+              "k_nearest_neighbours_classification",
+              "random_forest_classification",
+              "naive_bayes_classification"
             ]
           },
           "name": { "type": ["string", "null"], "default": null }
@@ -326,6 +331,107 @@
                     ]
                   }
                 }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "decision_tree_classification" } }
+            },
+            "then": {
+              "properties": {
+                "criterion": {
+                  "default": "gini",
+                  "enum": ["gini", "entropy"]
+                },
+                "splitter": { "default": "best", "enum": ["best", "random"] },
+                "max_depth": { "type": ["integer", "null"], "default": null },
+                "min_samples_split": { "type": "number", "default": 2 },
+                "min_samples_leaf": { "type": "number", "default": 1 },
+                "min_weight_fraction_leaf": { "type": "number", "default": 0.0 },
+                "max_features": { "type": ["integer", "string", "null"], "default": null },
+                "random_state": { "type": ["integer", "null"], "default": null },
+                "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
+                "min_impurity_decrease": { "type": "number", "default": 0.0 },
+                "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "support_vector_machine_classification" } }
+            },
+            "then": {
+              "properties": {
+                "C": { "type": "number", "default": 1.0},
+                "kernel": {
+                  "default": "rbf",
+                  "enum": ["linear", "poly", "rbf", "sigmoid", "precomputed"]
+                },
+                "degree": { "type": "number", "default": 3},
+                "gamma": { "type": ["string", "number"], "default": "scale" },
+                "coef0": { "type": "number", "default": 0.0 },
+                "tol": { "type": "number", "default": 1e-3 },
+                "shrinking": { "type": "boolean", "default": true },
+                "probability": { "type": "boolean", "default": false },
+                "max_iter": { "type": "integer", "default": -1 },
+                "decision_function_shape": {
+                  "default": "ovr",
+                  "enum": ["ovo", "ovr"]
+                },
+                "break_ties": { "type": "boolean", "default": false }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "k_nearest_neighbours_classification" } }
+            },
+            "then": {
+              "properties": {
+                "n_neighbors": { "type": "number", "default": 5},
+                "weights": {
+                  "default": "uniform",
+                  "enum": ["uniform", "distance"]
+                },
+                "algorithm": {
+                  "default": "auto",
+                  "enum": ["auto", "ball_Tree", "kd_tree", "brute"]
+                },
+                "leaf_size": { "type": "number", "default": 30},
+                "p": { "type": "number", "default": 2},
+                "metric": { "type": "string", "default": "minkowski"},
+                "coef0": { "type": "number", "default": 0.0 },
+                "n_jobs": { "type": ["integer", "null"], "default": null }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "random_forest_classification" } }
+            },
+            "then": {
+              "properties": {
+                "n_estimators": { "type": "integer", "default": 100 },
+                "criterion": {
+                  "default": "gini",
+                  "enum": ["gini", "entropy"]
+                },
+                "max_depth": { "type": ["integer", "null"], "default": null },
+                "min_samples_split": { "type": "number", "default": 2 },
+                "min_samples_leaf": { "type": "number", "default": 1 },
+                "min_weight_fraction_leaf": { "type": "number", "default": 0.0 },
+                "max_features": { "type": ["integer", "string", "null"], "default": null },
+                "random_state": { "type": ["integer", "null"], "default": null },
+                "max_leaf_nodes": { "type": ["integer", "null"], "default": null },
+                "min_impurity_decrease": { "type": "number", "default": 0.0 },
+                "ccp_alpha": { "type": "number", "default": 0.0, "minimum": 0 },
+                "bootstrap": { "type": "boolean", "default": true },
+                "oob_score": { "type": "boolean", "default": false },
+                "n_jobs": { "type": ["integer", "null"], "default": null },
+                "verbose": { "type": "integer", "default": 0 },
+                "warm_start": { "type": "boolean", "default": false },
+                "max_samples": { "type": ["number", "null"], "default": null }
               }
             }
           }

@@ -6,6 +6,44 @@ from jsonschema import Draft7Validator, validators
 import code_generator
 
 
+def run_in_docker(specs_path, features_path, labels_path):
+
+    import docker_layer
+    print('Trying to get docker client...', end='')
+    client = docker_layer.get_docker_client()
+
+    if client is None:
+        print('Failed')
+        return
+    print('Done')
+
+    container = docker_layer.create_container(client)
+    print(f'Created container {container.id}')
+    container.start()
+
+    tar_stream = docker_layer.create_tar_stream([
+        ('specs.json', open(specs_path, 'rb').read()),
+        ('features.csv', open(features_path, 'rb').read()),
+        ('labels.csv', open(labels_path, 'rb').read()),
+    ])
+
+    print('Moving files to container...', end='')
+    container.put_archive('/home/mluser/', tar_stream)
+    print('Done')
+
+    print('Will now execute the model(s)')
+    res = container.exec_run(
+        'python3 src/main.py --specs /home/mluser/specs.json --features /home/mluser/features.csv --labels /home/mluser/labels.csv', user='mluser', workdir='/home/mluser')
+
+    print(res.output.decode())
+    print(f'Will now kill container {container.id}...', end='')
+    container.kill()
+    print('Done')
+    print(f'Will now stop container {container.id}...', end='')
+    container.stop()
+    print('Done')
+
+
 def extend_with_default(validator_class):
     validate_properties = validator_class.VALIDATORS["properties"]
 
@@ -25,7 +63,6 @@ def extend_with_default(validator_class):
 
 
 def get_schema():
-
     p = os.path.join("src", "mlhub.json")
     with open(p, 'r') as file:
         schema = json.load(file)
@@ -41,11 +78,16 @@ def verify_exists(path):
 
 
 def validate_json(json):
-    DefaultValidatingDraft7Validator(get_schema()).validate(json)
-    # validate(instance=json, schema=MLHub_schema)
+    validator = DefaultValidatingDraft7Validator(get_schema())
+    if not validator.is_valid(json):
+        errors = sorted(validator.iter_errors(json), key=lambda e: e.path)
+        for error in errors:
+            print(error.message)
+
+        exit(1)
 
 
-def parse_json(json_path):
+def parse_json(json_path, dockerize=False, features=None, labels=None):
     parsed_json = None
     with open(json_path, 'r') as fp:
         parsed_json = json.load(fp)
@@ -54,45 +96,53 @@ def parse_json(json_path):
     train = parsed_json["train"]
     models = parsed_json["models"]
 
-    features_path, labels_path, category_threshold, train_data, train_settings = parse_train(
-        train)
-    parse_models(models, train["split"], features_path,
-                 labels_path, category_threshold, train_data, train_settings)
+    features_path, labels_path = parse_train(train, features_path_exists=(
+        features is not None), labels_path_exists=(labels is not None))
+
+    if features is not None:
+        features_path = features
+
+    if labels is not None:
+        labels_path = labels
+
+    if dockerize:
+        run_in_docker(json_path, features_path, labels_path)
+    else:
+        parse_models(models, train, features_path, labels_path)
 
 
-def parse_train(train):
+def parse_train(train, features_path_exists=False, labels_path_exists=False):
     train_data = train["data"]
-    train_settings = train["train_settings"]
     features_path = train_data["features"]
     labels_path = train_data["labels"]
-    category_threshold = train_data["category_threshold"]
 
-    verify_exists(features_path)
-    verify_exists(labels_path)
+    if not features_path_exists:
+        verify_exists(features_path)
+    if not labels_path_exists:
+        verify_exists(labels_path)
 
-    return features_path, labels_path, category_threshold, train_data, train_settings
+    return features_path, labels_path
 
 
-def parse_model(model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path):
+def parse_model(model, train, features_path, labels_path, out_path):
     model_type = model["type"]
     if model_type == 'cnn':
-        print(model)
-        return code_generator.generate_cnn(model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path)
+        return code_generator.generate_cnn(model, train, features_path, labels_path, out_path)
     else:
         return code_generator.generate_code(
-            model, train_split, features_path, labels_path, category_threshold, out_path)
-    # else:
-    #    raise Exception(f"Model type {model_type} does not exist")
+            model, train, features_path, labels_path, out_path)
 
 
-def parse_models(models, train_split, features_path, labels_path, category_threshold, train_data, train_settings):
+def parse_models(models, train, features_path, labels_path):
     out_path = os.path.join("out", str(datetime.time(datetime.now())))
-    os.mkdir(out_path)
+    os.makedirs(out_path)
     with concurrent.futures.ProcessPoolExecutor() as executor:
         results = [executor.submit(
-            parse_model, model, train_split, features_path, labels_path, category_threshold, train_data, train_settings, out_path) for model in models]
+            parse_model, model, train, features_path, labels_path, out_path) for model in models]
 
         for f in concurrent.futures.as_completed(results):
             print(f.result())
 
-    code_generator.generate_statistical_comparison(out_path)
+    if len(models) > 1:
+        problem_type = models[0]["type"].split('_')[-1]
+        code_generator.generate_statistical_comparison(problem_type, out_path)

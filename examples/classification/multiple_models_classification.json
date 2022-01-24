@@ -1,0 +1,41 @@
+{
+    "train": {
+      "split": {
+        "test_size": 0.1,
+        "random_state": 0
+      },
+      "data": {
+        "features": "/home/vitor/Documents/TACS/MLhub/data/classification/features.csv",
+        "labels": "/home/vitor/Documents/TACS/MLhub/data/classification/labels.csv"
+      }
+    },
+    "models": [
+      {
+        "type": "decision_tree_classification",
+        "name": "tree classifier"
+      },
+      {
+        "type": "decision_tree_classification",
+        "name": "tree2 classifier",
+        "criterion": "entropy"
+      },
+      {
+        "type": "support_vector_machine_classification",
+        "name": "svm classifier"
+      },
+      {
+        "type": "k_nearest_neighbours_classification",
+        "name": "knn classifier"
+      },
+      {
+        "type": "random_forest_classification",
+        "name": "forest classifier"
+      },
+      {
+        "type": "naive_bayes_classification",
+        "name": "bayes classifier"
+      }
+    ]
+  }
+  
+   

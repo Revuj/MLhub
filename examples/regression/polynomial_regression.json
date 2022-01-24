@@ -1,0 +1,26 @@
+{
+  "train": {
+    "split": {
+      "test_size": 0.1,
+      "random_state": 0
+    },
+    "data": {
+      "features": "/home/vitor/Documents/TACS/MLhub/data/regression/features.csv",
+      "labels": "/home/vitor/Documents/TACS/MLhub/data/regression/labels.csv"
+    }
+  },
+  "models": [
+    {
+      "type": "polynomial_regression",
+      "fit_intercept": false,
+      "normalize": false,
+      "copy_X": true,
+      "n_jobs": 3,
+      "positive": false,
+      "degree": 3,
+      "interaction_only": false,
+      "include_bias": true,
+      "order": "C"
+    }
+  ]
+}

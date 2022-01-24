@@ -5,8 +5,8 @@
       "random_state": 0
     },
     "data": {
-      "features": "/Users/rafavarela/Projects/MLhub/data/features.csv",
-      "labels": "/Users/rafavarela/Projects/MLhub/data/features.csv"
+      "features": "/home/vitor/Documents/TACS/MLhub/data/regression/features.csv",
+      "labels": "/home/vitor/Documents/TACS/MLhub/data/regression/labels.csv"
     }
   },
   "models": [
@@ -23,8 +23,7 @@
       "max_leaf_nodes": 3,
       "min_impurity_decrease": 15.1,
       "ccp_alpha": 0.0
-    },
-    {"type":"decision_tree_regression","name":"oioi"},
-    {"type":"linear_regression"}
+    }
   ]
 }
+

@@ -1,0 +1,28 @@
+{
+  "train": {
+    "split": {
+      "test_size": 0.1,
+      "random_state": 0
+    },
+    "data": {
+      "features": "/home/vitor/Documents/TACS/MLhub/data/regression/features.csv",
+      "labels": "/home/vitor/Documents/TACS/MLhub/data/regression/labels.csv"
+    }
+  },
+  "models": [
+    {
+      "type": "support_vector_regression",
+      "kernel": "rbf",
+      "degree": 3,
+      "gamma": "scale",
+      "coef0": 0.0,
+      "tol": 1e-3,
+      "C": 1.0,
+      "epsilon": 0.1,
+      "shrinking": true,
+      "cache_size": 200,
+      "verbose": false,
+      "max_iter": -1
+    }
+  ]
+}
