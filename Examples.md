@@ -15,6 +15,11 @@ First, you need [install MLHub](https://github.com/Revuj/MLhub#installation) lik
 > Clone the repository
 
     $ git clone git@github.com:Revuj/MLhub.git
+    
+
+> Setup a virtual environment
+
+    $ python3 -m venv env
 
 > Install the requirements
 
