@@ -5,8 +5,8 @@
       "random_state": 0
     },
     "data": {
-      "features": "/home/vitor/Documents/TACS/MLhub/data/cnn/features.csv",
-      "labels": "/home/vitor/Documents/TACS/MLhub/data/cnn/labels.csv"
+      "features": "/home/krystal/MLhub/data/cnn/features.csv",
+      "labels": "/home/krystal/MLhub/data/cnn/labels.csv"
     },
     "train_settings": {
       "epochs": 2,
