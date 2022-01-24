@@ -170,3 +170,174 @@ Since we have more than one model, you can also take a look at the statistical c
 ![](https://i.imgur.com/gSxCopf.png)
 
 ![](https://i.imgur.com/QX3455H.png)
+
+## Fashion MNIST (Image Classifcation)
+
+This time we have an image classification [problem](https://github.com/Revuj/MLhub/tree/master/data/cnn) about clothes. 
+The goal here is to predict the type of clothing is represented in an image.
+
+Let's also try to do a comparison between different CNN models. One without using Dropout layers and other using them [Here's how it's done](https://github.com/Revuj/MLhub/blob/master/examples/cnn.json):
+
+
+```json
+{
+  "train": {
+    "split": {
+      "test_size": 0.1,
+      "random_state": 0
+    },
+    "data": {
+      "features": "/home/vitor/Documents/TACS/MLhub/data/cnn/features.csv",
+      "labels": "/home/vitor/Documents/TACS/MLhub/data/cnn/labels.csv"
+    },
+    "train_settings": {
+      "epochs": 2,
+      "batch_size": 128 ,
+      "validation_split": 0.1
+    }
+  },
+  "models": [
+    {
+      "type": "cnn",
+      "loss": "categorical_crossentropy",
+      "input": {"type": "images", "shape": [28,28]},
+      "layers": [
+        {
+          "convolution": {
+            "filters": 32,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {
+          "convolution": {
+            "filters": 64,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {
+          "convolution": {
+            "filters": 128,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        "flatten",
+        {
+          "dense": {
+            "units": 128,
+            "activation":"relu"
+          }
+        },
+        {
+          "dense": {
+            "units": 10,
+            "activation":"softmax"
+          }
+        }
+      ]
+    },
+    {
+      "type": "cnn",
+      "loss": "categorical_crossentropy",
+      "input": {"type": "images", "shape": [28,28]},
+      "layers": [
+        {
+          "convolution": {
+            "filters": 32,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {"dropout": 0.25},
+        {
+          "convolution": {
+            "filters": 64,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {
+          "pooling": {
+            "size": [2, 2],
+            "type": "max"
+          }
+        },
+        {"dropout": 0.25},
+        {
+          "convolution": {
+            "filters": 128,
+            "size": [3, 3],
+            "activation":"relu"
+          }
+        },
+        {"dropout": 0.4},
+        "flatten",
+        {
+          "dense": {
+            "units": 128,
+            "activation":"relu"
+          }
+        },
+        {"dropout": 0.3},
+        {
+          "dense": {
+            "units": 10,
+            "activation":"softmax"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+We are defining 2 different CNN models, so the results will be a comparison between the two models. We can run the program like so:
+
+    $ python3 src/main.py --specs examples/cnn.json  
+
+Here's the output:
+
+```
+Executing python notebook...
+Executing python notebook...
+[...]
+Executed cnn_711033ec-7d48-11ec-b087-d7c57270a0f7 model
+Executed cnn_71103630-7d48-11ec-b088-d7c57270a0f7 model
+Executing statistical comparison python notebook...
+Executed statistical comparison
+```
+
+You can see that the statistical comparison report was generated in the [*out* folder](https://github.com/Revuj/MLhub/tree/master/examples_out/cnn). But first, let's look at a report for one of the models:
+
+![](https://i.imgur.com/4jDOOGp.png)
+
+
+![](https://i.imgur.com/qLhqbj3.png)
+
+
+Since we have more than one model, you can also take a look at the statistical comparison report, which gives you an overview about all model's metrics. Here we can see that using dropout layers increased the performance even though he only trained for 2 epochs.
+
+![](https://i.imgur.com/eRtkDM1.png)
+
+![](https://i.imgur.com/f3JJ7H4.png)
+
